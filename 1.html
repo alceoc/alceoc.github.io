@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Infinito in AR</title>
+    <!-- Carica A-Frame -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!-- Carica AR.js per la realtà aumentata -->
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+
+
+    <!-- La scena AR con configurazione per il rilevamento della superficie -->
+    <a-scene embedded arjs="sourceType: webcam; trackingMethod: best;">
+
+        <!-- Oggetto di testo AR che rappresenta la poesia -->
+        <a-entity position="0 1.5 0" scale="5 5 5">
+            <a-text value="L'infinito di Leopardi" position="0 2 0" scale="5 5 5" color="black"></a-text>
+            <a-text value="Sempre caro mi fu quest'ermo colle..." position="0 1.5 0" scale="3 3 3" color="black"></a-text>
+            <a-text value="E questa siepe, che da tanta parte..." position="0 1 0" scale="3 3 3" color="black"></a-text>
+            <a-text value="Del nostro viver, quasi a un cerchio..." position="0 0.5 0" scale="3 3 3" color="black"></a-text>
+            <a-text value="Il naufragar m'è dolce in questo mare." position="0 0 0" scale="3 3 3" color="black"></a-text>
+        </a-entity>
+
+        <!-- Fotocamera AR -->
+        <a-entity camera></a-entity>
+    </a-scene>
+
+</body>
+</html>
+
+
+
+

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AR.js Text Display</title>
+    <title>AR Surface Text</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ar.js/2.2.2/aframe-ar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ar.js/2.2.2/aframe-ar-nft.js"></script>
     <style>
         .arjs-loader {
             position: fixed;
@@ -19,35 +19,87 @@
             color: white;
             font-size: 1.25em;
         }
+
+        .place-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 5px;
+            z-index: 9999;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body style="margin: 0; overflow: hidden;">
-    <!-- Loading screen -->
     <div class="arjs-loader">
         <div>Loading, please wait...</div>
     </div>
 
-    <!-- A-Frame scene -->
+    <button class="place-button" id="placeButton">Place Text</button>
+
     <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-        renderer="logarithmicDepthBuffer: true;"
-        vr-mode-ui="enabled: false">
+        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+        renderer="logarithmicDepthBuffer: true; precision: medium;"
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false">
 
-        <!-- Text entity using a marker -->
-        <a-marker preset="hiro">
+        <!-- Create a container for the text -->
+        <a-entity id="textContainer">
             <a-text
-                value="Hello AR World!"
+                value="Hello World!"
                 position="0 0.5 0"
-                rotation="-90 0 0"
                 color="#000000"
                 align="center"
-                scale="1 1 1">
+                scale="1 1 1"
+                rotation="-90 0 0">
             </a-text>
-        </a-marker>
+        </a-entity>
 
-        <!-- Camera -->
-        <a-entity camera></a-entity>
+        <!-- Camera with raycaster -->
+        <a-camera position="0 0 0">
+            <a-cursor></a-cursor>
+        </a-camera>
     </a-scene>
+
+    <script>
+        window.addEventListener('load', function () {
+            const textContainer = document.getElementById('textContainer');
+            const placeButton = document.getElementById('placeButton');
+            const scene = document.querySelector('a-scene');
+            let isPlaced = false;
+
+            // Hide loader when scene is ready
+            scene.addEventListener('loaded', function () {
+                document.querySelector('.arjs-loader').style.display = 'none';
+            });
+
+            // Place text when button is clicked
+            placeButton.addEventListener('click', function() {
+                if (!isPlaced) {
+                    // Get camera position and rotation
+                    const camera = document.querySelector('a-camera');
+                    const position = camera.getAttribute('position');
+                    const rotation = camera.getAttribute('rotation');
+
+                    // Place text 1 meter in front of camera
+                    const radians = rotation.y * (Math.PI / 180);
+                    const x = position.x - Math.sin(radians);
+                    const z = position.z - Math.cos(radians);
+
+                    textContainer.setAttribute('position', `${x} 0 ${z}`);
+                    textContainer.setAttribute('rotation', `0 ${rotation.y} 0`);
+                    
+                    isPlaced = true;
+                    placeButton.textContent = 'Text Placed!';
+                    placeButton.style.backgroundColor = '#90EE90';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

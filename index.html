@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AR Surface Text</title>
+    <title>AR Text Display</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ar.js/2.2.2/aframe-ar-nft.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ar.js/2.2.2/aframe-ar.js"></script>
     <style>
         .arjs-loader {
             position: fixed;
@@ -19,84 +19,106 @@
             color: white;
             font-size: 1.25em;
         }
-
-        .place-button {
+        
+        .ar-controls {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
             padding: 10px 20px;
             background: white;
             border: none;
             border-radius: 5px;
-            z-index: 9999;
             cursor: pointer;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
         }
     </style>
 </head>
 <body style="margin: 0; overflow: hidden;">
+    <!-- Loading screen -->
     <div class="arjs-loader">
         <div>Loading, please wait...</div>
     </div>
 
-    <button class="place-button" id="placeButton">Place Text</button>
+    <!-- Controls -->
+    <div class="ar-controls">
+        <input type="text" id="textInput" placeholder="Enter text here" value="Hello AR World!">
+        <button id="placeText">Place Text</button>
+    </div>
 
+    <!-- AR Scene -->
     <a-scene
         embedded
-        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-        renderer="logarithmicDepthBuffer: true; precision: medium;"
-        vr-mode-ui="enabled: false"
-        device-orientation-permission-ui="enabled: false">
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;"
+        renderer="logarithmicDepthBuffer: true;"
+        vr-mode-ui="enabled: false">
 
-        <!-- Create a container for the text -->
+        <!-- Text Container -->
         <a-entity id="textContainer">
             <a-text
-                value="Hello World!"
-                position="0 0.5 0"
+                id="arText"
+                value="Hello AR World!"
+                position="0 0 -1"
+                rotation="0 0 0"
                 color="#000000"
                 align="center"
-                scale="1 1 1"
-                rotation="-90 0 0">
+                scale="1 1 1">
             </a-text>
         </a-entity>
 
-        <!-- Camera with raycaster -->
-        <a-camera position="0 0 0">
-            <a-cursor></a-cursor>
-        </a-camera>
+        <!-- Camera -->
+        <a-entity camera look-controls></a-entity>
     </a-scene>
 
     <script>
-        window.addEventListener('load', function () {
+        window.addEventListener('load', () => {
             const textContainer = document.getElementById('textContainer');
-            const placeButton = document.getElementById('placeButton');
+            const arText = document.getElementById('arText');
+            const textInput = document.getElementById('textInput');
+            const placeButton = document.getElementById('placeText');
             const scene = document.querySelector('a-scene');
             let isPlaced = false;
 
             // Hide loader when scene is ready
-            scene.addEventListener('loaded', function () {
+            scene.addEventListener('loaded', () => {
                 document.querySelector('.arjs-loader').style.display = 'none';
             });
 
-            // Place text when button is clicked
-            placeButton.addEventListener('click', function() {
+            // Update and place text
+            placeButton.addEventListener('click', () => {
+                const newText = textInput.value || 'Hello AR World!';
+                arText.setAttribute('value', newText);
+
                 if (!isPlaced) {
-                    // Get camera position and rotation
-                    const camera = document.querySelector('a-camera');
+                    const camera = document.querySelector('[camera]');
                     const position = camera.getAttribute('position');
                     const rotation = camera.getAttribute('rotation');
 
-                    // Place text 1 meter in front of camera
-                    const radians = rotation.y * (Math.PI / 180);
-                    const x = position.x - Math.sin(radians);
-                    const z = position.z - Math.cos(radians);
+                    // Place text 2 meters in front of camera
+                    textContainer.setAttribute('position', {
+                        x: position.x,
+                        y: position.y,
+                        z: position.z - 2
+                    });
+                    textContainer.setAttribute('rotation', {
+                        x: rotation.x,
+                        y: rotation.y,
+                        z: rotation.z
+                    });
 
-                    textContainer.setAttribute('position', `${x} 0 ${z}`);
-                    textContainer.setAttribute('rotation', `0 ${rotation.y} 0`);
-                    
                     isPlaced = true;
-                    placeButton.textContent = 'Text Placed!';
-                    placeButton.style.backgroundColor = '#90EE90';
+                    placeButton.textContent = 'Update Text';
                 }
             });
         });

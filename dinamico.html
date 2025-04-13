@@ -8,15 +8,16 @@
 <body>
   <h1>Che ore sono?</h1>
   <h3>Inserisci l'ora (da 0 a 23):</h3>
-  <input type="number" id="oraGiorno">
-  <button onclick="mostraSaluto()">Mostra saluto</button>
+  <input type="number" id="oraGiorno">  //ricorda che l'attributo id del campo numerico input serve come riferimento diretto per leggere il valore   
+  <button onclick="mostraSaluto()">Mostra saluto</button>  //ricorda che l'evento onclick in questo caso serve per richiamare la funzione 
 
-  <h2 id="risultato"></h2>
+  <h2 id="risultato"></h2>  //utilizziamo questo tag per mostrare il risultato   
 
   <script>
     function mostraSaluto() {
-      var ora = document.getElementById("oraGiorno").value;
-      
+      var ora = document.getElementById("oraGiorno").value;  //assegniamo il valore di input nella variabile
+
+      //prova a modificare le fasce orarie e i messaggi per ottenere risultati diversi 
       if (ora >= 3 && ora < 12) {
         document.getElementById("risultato").innerHTML = "Buongiorno!";
       } else if (ora >= 12 && ora < 18) {

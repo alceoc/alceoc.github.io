@@ -11,11 +11,11 @@
   <input type="number" id="oraGiorno">
   <button onclick="mostraSaluto()">Mostra saluto</button>
 
-  <p id="risultato">gigi</p>
+  <h2 id="risultato"></h2>
 
   <script>
     function mostraSaluto() {
-      var ora = parseInt(document.getElementById("oraGiorno").value);
+      var ora = document.getElementById("oraGiorno").value;
       
       if (ora >= 6 && ora < 12) {
         document.getElementById("risultato").innerHTML = "Buongiorno!";

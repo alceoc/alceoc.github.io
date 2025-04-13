@@ -16,16 +16,13 @@
   <script>
     function mostraSaluto() {
       var ora = document.getElementById("oraGiorno").value);
-      var resultElement = document.getElementById("risultato");
-
-      let greeting = "";
-
+     
       if (ora >= 6 && ora < 12) {
-        greeting = "Buongiorno!";
+        document.getElementById("risultato").innerHTML = "Buongiorno!";
       } else if (ora >= 12 && ora < 18) {
-        greeting = "Buon pomeriggio!";
+         document.getElementById("risultato").innerHTM = "Buon pomeriggio!";
       } else {
-        greeting = "Buona sera!";
+         document.getElementById("risultato").innerHTM = "Buona sera!";
       }
 
      

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Saluto in base all'ora</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <h1>Che ore sono?</h1>
+  <p>Inserisci l'ora (da 0 a 23):</p>
+  <input type="number" id="hourInput" min="0" max="23" placeholder="Es. 15">
+  <button onclick="showGreeting()">Mostra saluto</button>
+
+  <p id="result"></p>
+
+  <script>
+    function showGreeting() {
+      const hour = parseInt(document.getElementById("hourInput").value);
+      const resultElement = document.getElementById("result");
+
+      if (isNaN(hour) || hour < 0 || hour > 23) {
+        resultElement.textContent = "Inserisci un'ora valida tra 0 e 23.";
+        resultElement.style.color = "red";
+        return;
+      }
+
+      let greeting = "";
+
+      if (hour >= 6 && hour < 12) {
+        greeting = "Buongiorno!";
+      } else if (hour >= 12 && hour < 18) {
+        greeting = "Buon pomeriggio!";
+      } else {
+        greeting = "Buona sera!";
+      }
+
+      resultElement.textContent = greeting;
+      resultElement.style.color = "#28a745";
+    }
+  </script>
+</body>
+</html>
